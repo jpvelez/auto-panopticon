@@ -19,15 +19,16 @@ url = base_url + params
 workouts = requests.get(url).json()
 
 writer = csv.writer(open("out.csv", "w"))
-writer.writerow(["start_time", "end_time", "exercise_name", "reps", "note"])
+writer.writerow(["start_time", "end_time", "exercise_name", "reps", "note", "routine"])
 for workout in workouts:
     start_time = ts_to_date(fix_timestamp(workout['date']))
     end_time = ts_to_date(fix_timestamp(workout['end_date']))
+    routine = workout['label']
     note = workout['note']
     for exercise in workout['exercises']:
         exercise_name = exercise.get('label', "None")
         for ex_set in exercise['sets']:
             reps = ex_set['reps']
-            writer.writerow([start_time, end_time, exercise_name, reps, note])
+            writer.writerow([start_time, end_time, exercise_name, reps, note, routine])
 
 
